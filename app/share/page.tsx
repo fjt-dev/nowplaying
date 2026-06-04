@@ -1,5 +1,7 @@
 import { OdesliResponse } from '@/types/odesli';
-import NextImage from 'next/image';
+import SongCard from '@/components/SongCard';
+import PlayCard from '@/components/PlayCard';
+import ShareButton from '@/components/ShareButton';
 
 type Props = {
   searchParams: Promise<{ url?: string }>; // プロパティの型定義
@@ -24,29 +26,11 @@ export default async function SharePage({ searchParams }: Props) {
   const data: OdesliResponse = await res.json(); // RouteHandlerからのJSONをパース
   const entity = data.entitiesByUniqueId[data.entityUniqueId]; // 入力したメタデータを取り出し
 
-  const SUPPORTED_PLATFORMS = ['spotify', 'appleMusic', 'youtubeMusic', 'amazonMusic'] as const;
-
   return (
     <div>
-      {entity.thumbnailUrl && (
-        <NextImage src={entity.thumbnailUrl} alt={entity.title ?? 'アルバムアート'} width={300} height={300} />
-      )}
-      <h1>{entity.title}</h1>
-      <p>{entity.artistName}</p>
-      <ul>
-        {SUPPORTED_PLATFORMS.map((platform) => {
-          const link = data.linksByPlatform[platform]; // リンク情報の取り出し，存在しない場合：undefined
-          if (!link) return null; // リンクが存在しない場合何も表示しない
-          return (
-            // リンクが存在する場合
-            <li key={platform}>
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                {platform}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+      <SongCard thumbnailUrl={entity.thumbnailUrl} title={entity.title} artistName={entity.artistName} />
+      <PlayCard linksByPlatform={data.linksByPlatform} />
+      <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={data.pageUrl} />
     </div>
   );
 }
