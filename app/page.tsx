@@ -7,11 +7,11 @@ import { Toaster } from 'sonner';
 
 export default function Page() {
   return (
-    <main className="flex flex-col items-center min-h-screen px-4 py-16">
+    <main className="flex flex-col items-center justify-center min-h-screen px-4 gap-8 max-w-lg mx-auto w-full">
       <Hero />
       <ServiceInfo />
-      <TryCard />
       <UrlInput />
+      <TryCard />
       <Footer />
       <Toaster />
     </main>

@@ -1,5 +1,5 @@
 import NextImage from 'next/image';
-import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent } from './ui/card';
 
 type Props = {
   thumbnailUrl?: string;
@@ -9,12 +9,24 @@ type Props = {
 
 export default function SongCard({ thumbnailUrl, title, artistName }: Props) {
   return (
-    <Card className="relative mx-auto w-full max-w-sm pt-0">
-      <CardHeader>
-        {thumbnailUrl && <NextImage src={thumbnailUrl} alt={title ?? 'アルバムアート'} width={300} height={300} />}
-        <CardTitle>{title ?? 'タイトル不明'}</CardTitle>
-        <CardDescription>{artistName ?? 'アーティスト不明'}</CardDescription>
-      </CardHeader>
+    <Card className="w-full overflow-hidden pt-0">
+      {thumbnailUrl && (
+        <div className="relative w-full aspect-square">
+          <NextImage
+            src={thumbnailUrl}
+            alt={title ?? 'アルバムアート'}
+            fill
+            sizes="(max-width: 768px) 100vw, 448px"
+            className="object-cover"
+            loading="eager"
+            priority
+          />
+        </div>
+      )}
+      <CardContent className="p-4 pt-2">
+        <h2 className="font-bold text-lg">{title ?? 'タイトル不明'}</h2>
+        <p className="text-muted-foreground text-sm">{artistName ?? 'アーティスト不明'}</p>
+      </CardContent>
     </Card>
   );
 }

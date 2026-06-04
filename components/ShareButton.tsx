@@ -15,12 +15,12 @@ export default function ShareButton({ title, artistName, pageUrl }: Props) {
   const misskeyUrl = `https://misskey-hub.net/share/?text=${encodeURIComponent(shareText)}&visibility=public&localOnly=0`;
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Share</CardTitle>
       </CardHeader>
-      <CardContent className="">
-        <Button asChild>
+      <CardContent className="flex flex-row gap-2">
+        <Button asChild variant="outline" className="flex-1">
           <a href={twitterUrl} target="_blank">
             <svg role="img" viewBox="0 0 24 24" width={20} height={20} fill={`#${siX.hex}`}>
               <path d={siX.path} />
@@ -28,7 +28,7 @@ export default function ShareButton({ title, artistName, pageUrl }: Props) {
             X (Twitter)
           </a>
         </Button>
-        <Button asChild>
+        <Button asChild variant="outline" className="flex-1">
           <a href={misskeyUrl} target="_blank">
             <svg role="img" viewBox="0 0 24 24" width={20} height={20} fill={`#${siMisskey.hex}`}>
               <path d={siMisskey.path} />

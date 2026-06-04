@@ -21,7 +21,7 @@ export default function TryCard() {
   };
 
   return (
-    <Card size="sm" className="mx-auto w-full max-w-sm">
+    <Card size="sm" className="mx-auto w-full">
       <CardHeader>
         <CardTitle>試してみる</CardTitle>
         <CardDescription>URLを持っていなくても機能を試すことができます</CardDescription>
@@ -29,7 +29,7 @@ export default function TryCard() {
       <CardContent>
         <p>{SAMPLE_TITLE}</p>
         <div className="flex gap-2">
-          <Input readOnly value={SAMPLE_URL} />
+          <Input readOnly value={SAMPLE_URL} className="text-xs text-muted-foreground" />
           <Button
             onClick={() => {
               handleCopy();
@@ -41,7 +41,9 @@ export default function TryCard() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleTry}>直接試す</Button>
+        <Button onClick={handleTry} className="w-full">
+          直接試す
+        </Button>
       </CardFooter>
     </Card>
   );

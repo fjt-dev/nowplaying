@@ -1,4 +1,5 @@
 import { OdesliResponse } from '@/types/odesli';
+import NextImage from 'next/image';
 import SongCard from '@/components/SongCard';
 import PlayCard from '@/components/PlayCard';
 import ShareButton from '@/components/ShareButton';
@@ -27,10 +28,31 @@ export default async function SharePage({ searchParams }: Props) {
   const entity = data.entitiesByUniqueId[data.entityUniqueId]; // 入力したメタデータを取り出し
 
   return (
-    <div>
-      <SongCard thumbnailUrl={entity.thumbnailUrl} title={entity.title} artistName={entity.artistName} />
-      <PlayCard linksByPlatform={data.linksByPlatform} />
-      <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={data.pageUrl} />
+    <div className="relative min-h-screen overflow-hidden">
+      {entity.thumbnailUrl && (
+        <NextImage
+          src={entity.thumbnailUrl}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover scale-110 blur-2xl opacity-50"
+          aria-hidden="true"
+        />
+      )}
+      <div className="relative z-10 flex flex-col items-center gap-4 px-4 py-8 max-w-md mx-auto overflow-x-hidden">
+        <SongCard thumbnailUrl={entity.thumbnailUrl} title={entity.title} artistName={entity.artistName} />
+        <PlayCard linksByPlatform={data.linksByPlatform} />
+        <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={data.pageUrl} />
+        <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
+          <p>
+            Made with &#x2764; by{' '}
+            <a href="https://fjtd.dev" className="underline">
+              fjtd.dev
+            </a>
+            .
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

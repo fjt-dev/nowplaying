@@ -26,7 +26,7 @@ export default function UrlInput() {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-full">
       <Input
         type="url"
         placeholder="https://"
