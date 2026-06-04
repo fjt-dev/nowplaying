@@ -8,10 +8,11 @@ export type APIProvider = 'spotify' | 'itunes' | 'youtube' | 'amazon';
 export type OdesliEntry = {
   id: string;
   type: 'song' | 'album';
+  title?: string;
   artistName?: string;
-  thumbnaiUrl?: string;
-  thumbnaiWidth?: string;
-  thumbnaiHeight?: string;
+  thumbnailUrl?: string;
+  thumbnailWidth?: string;
+  thumbnailHeight?: string;
   apiProvider: APIProvider;
   platforms: Platform[];
 };
