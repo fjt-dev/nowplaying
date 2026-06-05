@@ -58,6 +58,8 @@ export default async function SharePage({ searchParams }: Props) {
   const data: OdesliResponse = await res.json(); // RouteHandlerからのJSONをパース
   const entity = data.entitiesByUniqueId[data.entityUniqueId]; // 入力したメタデータを取り出し
 
+  const sharePageUrl = `https://nowplaying.fjtd.dev/share?url=${encodeURIComponent(url)}`;
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       {entity.thumbnailUrl && (
@@ -73,7 +75,7 @@ export default async function SharePage({ searchParams }: Props) {
       <div className="relative z-10 flex flex-col items-center gap-4 px-4 py-8 max-w-md mx-auto overflow-x-hidden">
         <SongCard thumbnailUrl={entity.thumbnailUrl} title={entity.title} artistName={entity.artistName} />
         <PlayCard linksByPlatform={data.linksByPlatform} />
-        <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={data.pageUrl} />
+        <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={sharePageUrl} />
         <Link href="/" className="w-full">
           <Button variant="outline" className="w-full">
             別の曲を変換する
