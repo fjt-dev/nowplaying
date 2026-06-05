@@ -7,7 +7,7 @@ import { Toaster } from 'sonner';
 
 export default function Page() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen px-4 gap-8 max-w-lg mx-auto w-full">
+    <main className="flex flex-col items-center justify-center px-4 gap-8 max-w-lg mx-auto w-full pt-16">
       <Hero />
       <ServiceInfo />
       <UrlInput />

@@ -61,7 +61,7 @@ export default async function SharePage({ searchParams }: Props) {
   const sharePageUrl = `https://nowplaying.fjtd.dev/share?url=${encodeURIComponent(url)}`;
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative overflow-hidden min-h-screen">
       {entity.thumbnailUrl && (
         <NextImage
           src={entity.thumbnailUrl}
@@ -72,7 +72,7 @@ export default async function SharePage({ searchParams }: Props) {
           aria-hidden="true"
         />
       )}
-      <div className="relative z-10 flex flex-col items-center gap-4 px-4 py-8 max-w-md mx-auto overflow-x-hidden">
+      <div className="relative z-10 flex flex-col items-center gap-4 px-4 py-8 max-w-md mx-auto">
         <SongCard thumbnailUrl={entity.thumbnailUrl} title={entity.title} artistName={entity.artistName} />
         <PlayCard linksByPlatform={data.linksByPlatform} />
         <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={sharePageUrl} />
