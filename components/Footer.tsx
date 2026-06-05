@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer>
+    <footer className="text-center">
       <p>
         The source code is available on{' '}
         <a href="https://github.com/fjt-dev/nowplaying" className="underline">

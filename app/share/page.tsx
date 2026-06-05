@@ -1,5 +1,7 @@
 import { OdesliResponse } from '@/types/odesli';
 import NextImage from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import SongCard from '@/components/SongCard';
 import PlayCard from '@/components/PlayCard';
 import ShareButton from '@/components/ShareButton';
@@ -47,6 +49,11 @@ export default async function SharePage({ searchParams }: Props) {
         <SongCard thumbnailUrl={entity.thumbnailUrl} title={entity.title} artistName={entity.artistName} />
         <PlayCard linksByPlatform={data.linksByPlatform} />
         <ShareButton title={entity.title} artistName={entity.artistName} pageUrl={data.pageUrl} />
+        <Link href="/" className="w-full">
+          <Button variant="outline" className="w-full">
+            別の曲を変換する
+          </Button>
+        </Link>
         <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
           <p>
             Made with &#x2764; by{' '}
