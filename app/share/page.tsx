@@ -1,7 +1,11 @@
-import { OdesliResponse } from '@/types/odesli';
+import type { Metadata } from 'next';
 import NextImage from 'next/image';
 import Link from 'next/link';
+
+import { OdesliResponse } from '@/types/odesli';
+
 import { Button } from '@/components/ui/button';
+
 import SongCard from '@/components/SongCard';
 import PlayCard from '@/components/PlayCard';
 import ShareButton from '@/components/ShareButton';
@@ -11,12 +15,33 @@ type Props = {
   // searchParams：NextJS 15から非同期
 };
 
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { url } = await searchParams;
+  if (!url) return { title: 'NowPlaying' };
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/resolve?url=${encodeURIComponent(url)}`);
+  if (!res.ok) return { title: 'NowPlaying' };
+
+  const data = await res.json();
+  const entity = data.entitiesByUniqueId[data.entityUniqueId];
+
+  return {
+    title: `${entity.title ?? ''} - ${entity.artistName ?? ''}`,
+    openGraph: {
+      title: `${entity.title ?? ''} - ${entity.artistName ?? ''}`,
+      images: entity.thumbnailUrl ? [{ url: entity.thumbnailUrl }] : []
+    },
+    twitter: {
+      card: 'summary',
+      title: `${entity.title ?? ''} - ${entity.artistName ?? ''}`,
+      images: entity.thumbnailUrl ? [entity.thumbnailUrl] : []
+    }
+  };
+}
+
 export default async function SharePage({ searchParams }: Props) {
   const params = await searchParams;
   const url = params.url;
-
-  console.log('BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
-  console.log('url:', url);
 
   if (!url) {
     return <div>URLが指定されていません</div>;
