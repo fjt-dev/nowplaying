@@ -10,7 +10,11 @@ type Props = {
 };
 
 export default async function SharePage({ searchParams }: Props) {
-  const { url } = await searchParams;
+  const params = await searchParams;
+  const url = params.url;
+
+  console.log('BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
+  console.log('url:', url);
 
   if (!url) {
     return <div>URLが指定されていません</div>;

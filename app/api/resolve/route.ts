@@ -4,6 +4,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { OdesliResponse } from '@/types/odesli';
 
+function normalizeUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+
+    // Spotify
+    if (parsed.hostname === 'open.spotify.com') {
+      parsed.pathname = parsed.pathname.replace('/intl-ja', '');
+      parsed.search = '';
+    }
+
+    // Apple Msuic
+    if (parsed.hostname === 'music.apple.com') {
+      const trackId = parsed.searchParams.get('i');
+      parsed.search = '';
+      if (trackId) {
+        parsed.searchParams.set('i', trackId);
+      }
+    }
+
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
 export async function GET(request: NextRequest) {
   const url = request.nextUrl.searchParams.get('url');
 
@@ -12,8 +37,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'URLが指定されていません' }, { status: 400 });
   }
 
+  const normalizedUrl = normalizeUrl(url);
+
   const res = await fetch(
-    `https://api.song.link/v1-alpha.1/links?url=${encodeURIComponent(url)}&userCountry=JP&songIfSingle=true`,
+    `https://api.song.link/v1-alpha.1/links?url=${encodeURIComponent(normalizedUrl)}&userCountry=JP&songIfSingle=true`,
     { next: { revalidate: 86400 } }
   );
 
