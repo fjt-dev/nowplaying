@@ -14,7 +14,7 @@ function normalizeUrl(url: string): string {
       parsed.search = '';
     }
 
-    // Apple Msuic
+    // Apple Music
     if (parsed.hostname === 'music.apple.com') {
       const trackId = parsed.searchParams.get('i');
       parsed.search = '';
