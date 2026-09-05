@@ -2,57 +2,76 @@
 
 [日本語](./README.md) | English
 
-This README was machine-translated from Japanese. The original Japanese version takes precedence in case of any inconsistency.
-
-**URL**: [nowplaying.fjtd.dev](https://nowplaying.fjtd.dev/)
+**Public URL**: [nowplaying.fjtd.dev](https://nowplaying.fjtd.dev/)
 
 > [!WARNING]
-> The [Odesli API (v1-alpha.1)](https://linktree.notion.site/API-d0ebe08a5e304a55928405eb682f6741) used in this project is scheduled to be deprecated on July 31, 2026.<br />
-> We are currently improving the service to use individual service APIs and LLMs to ensure continued availability.
+> NowPlaying has ended its service, development, and updates.
+> The source code remains publicly available as a creation record.
 
-A web application that allows you to aggregate and share links to multiple services by pasting a URL from Spotify or other platforms.<br />
-It also solves the issue where OGP is not displayed when sharing Apple Music links on Twitter.
+This is a web app that allows you to paste URLs from services like Spotify to display and share links to multiple services all in one place.
+It also solves the issue where OGP is not displayed when sharing an Apple Music link on Twitter.
 
 ---
+
+## Service Termination
+
+This service used the Odesli API to retrieve links for multiple music streaming services. With the discontinuation of that API, it became difficult to continue operating the service under its conventional architecture.
+
+We considered migrating to individual music service APIs or alternative link conversion APIs, but due to constraints such as terms of use, ongoing costs, and rate limits, we were unable to establish an architecture that could be sustainably maintained as an independent solo project.
+
+We also considered redesigning it as a portfolio project for an infrastructure engineer, but securing a means to retrieve music data as a prerequisite required extensive consideration. Taking into account the infrastructure design and operations we want to focus on going forward, alongside the burden of development and maintenance, we decided to conclude this project and move on to new endeavors.
+
+Thank you very much for using NowPlaying.
 
 ## Background
 
-When sharing Apple Music links on Twitter, no preview is displayed. On the other hand, Spotify beautifully displays the song title, artist, and album art.<br />
-There is also the problem that Apple Music links cannot be opened by Spotify users, and vice versa.<br />
-The development of this tool was inspired by the frustration of wanting to introduce favorite songs, but having them go unheard due to differences in services.<br />
-To solve these two problems, I created a tool that aggregates links from multiple services and improves the sharing experience on Twitter.<br />
-NexTone Link served as a reference for the UI design. While that service uses a CSS gradient based on the album art for the background, this app blurs the album art itself with CSS to use as the background.
+At the time of development, sharing an Apple Music link on Twitter did not display a preview, making it difficult to convey song information. In addition, if the recipient used a different music streaming service, they had to search for the song again on their own platform.
+
+The frustration of wanting to introduce favorite songs, only for them to be difficult to listen to due to service differences, sparked this development. By providing a shareable page equipped with links to multiple services and OGP, the goal was to reduce this friction.
+
+For the UI design, we referenced NexTone Link. The background uses a CSS-blurred version of the album art itself.
 
 ## Tech Stack
 
-- Framework: Next.js 16 (App Router)
-- Language: TypeScript
-- Styling: Tailwind CSS / shadcn/ui
-- API: Odesli API
-- Deploy: Vercel
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS / shadcn/ui
+- **API**: Odesli API
+- **Hosting**: Vercel
 
-## Design Decisions
+## Architectural Decisions
 
-### Use of Route Handler
+### Consolidating API Calls into Route Handlers
 
-Odesli API calls are centralized in `app/api/resolve/route.ts`. Since the front-end only calls `/api/resolve`, future changes to the API can be handled by modifying only the Route Handler. Although I am currently using the Odesli API, I can switch to a different API after its deprecation by modifying only that specific file.
+Calls to the Odesli API were consolidated into `app/api/resolve/route.ts`, allowing both the share page and OGP generation processes to utilize it via `/api/resolve`.
 
-### Use of Query Parameters
+While external API access logic was centralized, the returned data maintained the original Odesli format as-is. Consequently, migrating to a different API would have required not only updating the call logic but also revising type definitions and data references on the frontend.
 
-I adopted a query parameter approach for the share page URLs. This not only enables a simple design without the need for a database, but also keeps future support for browser extensions in mind.
+### Shareable URLs Using Query Parameters
+
+The input source music service's URL was included as a query parameter in the share page URL, enabling sharing without the need for a database. We also envisioned use cases where URLs could be passed from browser extensions.
 
 ### URL Normalization
 
-By normalizing Spotify URLs (removing `intl-ja` and `si` parameters) and Apple Music URLs (removing extra query parameters) before passing them to the API, the app supports various URL formats.
+Spotify URLs were normalized by removing `/intl-ja` and query parameters, while Apple Music URLs retained the `i` parameter used to identify individual tracks. This standardized the format of URLs passed to the API by stripping away extraneous information added during sharing.
 
 ---
 
-## Future Plans
+## Considered Improvements
 
-- **Response to Odesli API deprecation / API migration**
-  - Considering a combination of Spotify Web API, Apple Music API, and YouTube Data API
-  - Considering removing Amazon Music from supported services, as its API is only available in closed beta and not accessible to individual developers.
-- **Improving search accuracy using LLMs**
-  - Currently, URLs for all supported services may not always be displayed, so I plan to use an LLM to improve the accuracy of search results
-- Support for browser extensions and Apple Shortcuts
-- Expanding supported services
+To ensure service continuation and strengthen the infrastructure, we explored the following potential improvements. All of these remained in the conceptual and research phases and were never implemented.
+
+- **Migration of Music APIs**  
+  We explored combinations of the Spotify Web API, Apple Music API, and YouTube Data API, as well as alternative link conversion APIs. We also considered reviewing the scope of supported services based on each platform's terms of use, costs, and rate limits.
+
+- **Improvement of Search and Matching Accuracy**  
+  We considered matching using ISRC, track names, and artist names, along with comparing candidates using an LLM. Regarding the LLM, restrictions on the AI usage of retrieved data prevented its adoption.
+
+- **Revising Share URLs and Data Storage**  
+  We looked into a method of saving conversion results and referencing them via a share ID. The goal was to build an architecture where share pages and OGP could still be displayed from cached information even if external APIs experienced outages.
+
+- **Enhancement of Infrastructure and Operational Foundations**  
+  We investigated decoupling API processing, implementing caching, rate limiting, monitoring, CI/CD, and Infrastructure as Code.
+
+- **Expansion of Use Cases and Supported Services**  
+  We conceptualized support for browser extensions and Apple Shortcuts, as well as the addition of more music streaming services.
